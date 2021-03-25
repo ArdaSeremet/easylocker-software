@@ -1,24 +1,28 @@
-# locker-gui
 
-## Project setup
+# EasyLocker GUI Software for SBC Computers  
+
+## Project Initialization
+
 ```
+npm install
+npm rebuild
 npm install
 ```
 
-### Compiles and hot-reloads for development
+  
+
+### Starting a development server to experiment
+
 ```
-npm run serve
+npm run electron:serve
 ```
 
-### Compiles and minifies for production
+  
+
+### Compile the application for ARMv7L Architecture
+
 ```
-npm run build
+npm run electron:build -- --dir --linux --armv7l
 ```
 
-### Lints and fixes files
-```
-npm run lint
-```
-
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
+The compiled executable can be found at `./dist_electron/linux-armv7l-unpacked/LockerGUI`.
