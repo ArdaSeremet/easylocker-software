@@ -1,0 +1,19 @@
+export const options = {
+    "uniqueSystemId": "SOME_UNIQUE_CHARACTERS_REGISTERED_IN_DB",
+    "dbConfiguration": {
+        "dbHost": "DB_HOSTNAME",
+        "dbUser": "DB_USERNAME",
+        "dbPass": "DB_PASSWORD",
+        "dbName": "DB_DATABASE"
+    },
+    "serialPorts": {
+        "barcodeReader": {
+            "port": "/dev/ttyACM0",
+            "baudRate": 19200
+        },
+        "modbusIOControl": {
+            "port": "/dev/ttyUSB0",
+            "baudRate": 9600
+        }
+    }
+};
