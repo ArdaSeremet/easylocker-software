@@ -72,8 +72,7 @@ export const serial = new SerialPort(options.serialPorts.barcodeReader.port, {
 export const serialParser = serial.pipe(new Readline({ delimiter: '\r' }));
 
 client.connectRTUBuffered(options.serialPorts.modbusIOControl.port, {
-    baudRate: options.serialPorts.modbusIOControl.baudRate,
-    rtscts: true
+    baudRate: options.serialPorts.modbusIOControl.baudRate
 });
 
 client.setTimeout(2000);

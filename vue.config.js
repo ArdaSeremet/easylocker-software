@@ -8,16 +8,17 @@ module.exports = {
                 'mysql'
             ],
             builderOptions: {
-                "productName": "Locker GUI",
+                "productName": "LockerGUI",
+		"compression": "normal",
                 "appId": "com.plushwsw.easylocker",
                 "linux": {
-                    "executableName": "Locker GUI",
+                    "executableName": "LockerGUI",
                     "target": {
                         "target": "AppImage",
                         "arch": [
                             "armv7l"
                         ]
-                    }
+                    }, "compression": "normal"
                 }
             }
         }

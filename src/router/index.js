@@ -1,7 +1,7 @@
 import { createRouter, createWebHashHistory } from 'vue-router'
 import Home from '../views/Home.vue'
 import LeaveWithoutRegistration from '../views/LeaveWithoutRegistration.vue'
-import LeaveWithoutReservation from '../views/LeaveWithoutReservation.vue'
+import MakeReservation from '../views/MakeReservation.vue'
 import GetWithoutRegistration from '../views/GetWithoutRegistration.vue'
 import RegisterWithRFID from '../views/RegisterWithRFID.vue'
 import LeaveToRFIDUser from '../views/LeaveToRFIDUser.vue'
@@ -24,9 +24,9 @@ const routes = [
     component: GetWithoutRegistration
   },
   {
-    path: '/leave-carrier',
-    name: 'LeaveCarrier',
-    component: LeaveWithoutReservation
+    path: '/make-reservation',
+    name: 'MakeReservation',
+    component: MakeReservation
   },
   {
     path: '/leave/drawer-size',
@@ -42,6 +42,11 @@ const routes = [
     path: '/leave/email',
     name: 'Leave/Email',
     component: () => import('../components/LeaveWithoutReservation/Email.vue')
+  },
+  {
+    path: '/leave/own-email',
+    name: 'Leave/OwnEmail',
+    component: () => import('../components/LeaveWithoutReservation/OwnEmail.vue')
   },
   {
     path: '/leave/final',

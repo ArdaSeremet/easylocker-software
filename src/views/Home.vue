@@ -18,10 +18,10 @@
         </router-link>
       </li>
       <li>
-        <router-link to="/leave-carrier">
-          Leave<br />
-          Package<br />
-          Without<br />
+        <router-link to="/make-reservation">
+          Make<br />
+          An<br />
+          Offline<br />
           Reservation<br />
         </router-link>
       </li>

@@ -19,31 +19,14 @@
   <span class="spaced">Or</span>
   <p>You can use barcode scanner to scan your barcodes automatically.</p>
 
-  <div class="modal" v-if="showDrawerCloseModal">
-    Please close the drawer after getting the package...
+  <div class="modal-wrapper" v-if="modalShow">
+    <div class="modal">
+      {{ modalText }}
+    </div>
   </div>
 </template>
 
 <style scoped>
-.modal {
-  position: absolute;
-  border: 1px solid #222;
-  background-color: #333;
-  padding: 15px;
-  width: 60%;
-  height: 40%;
-  border-radius: 20px;
-  z-index: 999;
-  left: 50%;
-  top: 50%;
-  transform: translate(-50%, -50%);
-  color: #f4f4f4;
-  font-size: 32px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-}
 h2 {
   font-size: 32px;
   color: #222;
@@ -105,7 +88,8 @@ export default {
   data() {
     return {
       barcodeNumber: null,
-      showDrawerCloseModal: false,
+      modalShow: false,
+      modalText: "Undefined",
     };
   },
   mounted() {
@@ -127,38 +111,90 @@ export default {
       this.barcodeNumber = input.target.value;
     },
     handleSubmit: function () {
+      this.modalText = "Processing...";
+      this.modalShow = true;
+
       CONFIG.db.query(
         `SELECT * FROM drawers WHERE locker_id = ? AND barcode = ? AND status = ?`,
-        [CONFIG.LOCKER_ID, this.barcodeNumber, 1],
+        [CONFIG.LOCKER_ID, this.barcodeNumber, 2],
         (err, res) => {
-          if (err) return;
+          if (err) {
+            this.modalText =
+              "An internal server error occured. Please try again later.";
+            setTimeout(() => {
+              this.modalShow = false;
+            }, 3000);
+            return;
+          }
 
           this.barcodeNumber = null;
 
-          if (res.length > 0) {
-            const relayNumber = res[0].relay_number;
+          if (res.length <= 0) {
+            this.modalText =
+              "No pending packages are found for this barcode number.";
+            setTimeout(() => {
+              this.modalShow = false;
+            }, 3000);
+            return;
+          }
 
-            HELPERS.handleOpeningDrawer(relayNumber, (err) => {
+          this.modalText = "Found a pending package...";
+
+          const relayNumber = res[0].relay_number;
+          const drawerId = res[0].id;
+
+          HELPERS.handleOpeningDrawer(relayNumber, (err) => {
+            if (err) {
+              this.modalText =
+                "Internal server error occured. Please try again later.";
+              setTimeout(() => {
+                this.modalShow = false;
+              }, 3000);
+              return;
+            }
+
+            this.modalText =
+              "Opened the associated drawer. Please close it after you get the package.";
+
+            HELPERS.pollSolenoidUntilClosed(relayNumber, (err, res) => {
               if (err) {
-                console.log("SYSTEM FAULT");
+                this.modalText =
+                  "Internal server error occured. Please try again later.";
+                setTimeout(() => {
+                  this.modalShow = false;
+                }, 3000);
                 return;
               }
 
-              this.showDrawerCloseModal = true;
+              if (res) {
+                this.modalText = "Processing...";
 
-              HELPERS.pollSolenoidUntilClosed(relayNumber, (err, res) => {
-                if (err) {
-                  console.log("DRAWER CLOSE SYSTEM FAULT");
-                  return;
-                }
+                CONFIG.db.query(
+                  "UPDATE drawers SET status = ?, barcode = ?, recipient_name = ?, recipient_email = ?, recipient_phone = ? WHERE id = ?",
+                  [0, 0, "", "", "", drawerId],
+                  (err, res) => {
+                    if (err) {
+                      this.modalText =
+                        "Internal server error occured. Please try again later.";
+                      setTimeout(() => {
+                        this.modalShow = false;
+                      }, 3000);
+                      return;
+                    }
 
-                if (res) {
-                  this.showDrawerCloseModal = false;
-                  console.log("CLOSED DRAWER");
-                }
-              });
+                    if (res) {
+                      this.modalText =
+                        "Thank you for choosing us. Have a nice day!";
+                      setTimeout(() => {
+                        this.modalShow = false;
+                        this.$router.push("/");
+                      }, 3000);
+                    }
+                  }
+                );
+              }
             });
-          }
+          });
         }
       );
     },

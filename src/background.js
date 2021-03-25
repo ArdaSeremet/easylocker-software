@@ -15,10 +15,10 @@ async function createWindow() {
   const win = new BrowserWindow({
     width: 1024,
     height: 650,
-    //fullscreen: true,
-    //frame: false,
-    //autoHideMenuBar: true,
-    //kiosk: true,
+    fullscreen: true,
+    frame: false,
+    autoHideMenuBar: true,
+    kiosk: true,
     webPreferences: {
       enableRemoteModule: true,
       nodeIntegration: true

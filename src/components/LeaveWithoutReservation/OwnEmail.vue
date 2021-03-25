@@ -1,5 +1,5 @@
 <template>
-  <h2>Recipient E-mail</h2>
+  <h2>Your E-mail To Get The Reservation Details</h2>
 
   <div class="input-group">
     <input
@@ -71,7 +71,7 @@ input::-webkit-inner-spin-button {
 import SimpleKeyboard from "@/components/SimpleKeyboard.vue";
 
 export default {
-  name: "Leave/Name",
+  name: "Leave/OwnEmail",
   components: {
     SimpleKeyboard,
   },
@@ -94,11 +94,12 @@ export default {
       if (this.email.length <= 0) return;
 
       this.$router.push({
-        path: "/leave/own-email",
+        path: "/leave/final",
         query: {
           sizeCode: this.$route.query.sizeCode,
           name: this.$route.query.name,
-          email: this.email,
+          email: this.$route.query.email,
+          ownEmail: this.email,
         },
       });
     },
