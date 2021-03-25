@@ -3,6 +3,9 @@
 
 ## Project Initialization
 
+First of all, you need to rename `./src/options.js.example` to `./src/options.js`.
+Then, you must enter the system configuration parameters inside that file.
+
 ```
 npm install
 npm rebuild
