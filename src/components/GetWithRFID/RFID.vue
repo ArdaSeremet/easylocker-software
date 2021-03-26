@@ -167,12 +167,31 @@ export default {
                     }
 
                     if (res) {
-                      this.modalText =
-                        "Successfully completed the procedure. Have a nice day!";
-                      setTimeout(() => {
-                        this.modalShow = false;
-                      }, 3000);
-                      return;
+                      this.modalText = "Processing the request...";
+
+                      CONFIG.db.query(
+                        "UPDATE drawers SET status = ?, rfid_user_id = ? WHERE id = ?",
+                        [0, 0, drawerData.id],
+                        (err, res) => {
+                          if (err) {
+                            this.modalText =
+                              "An internal system error occured. Please try again later...";
+                            setTimeout(() => {
+                              this.modalShow = false;
+                            }, 3000);
+                            return;
+                          }
+                          if (res) {
+                            this.modalText =
+                              "Successfully completed the procedure. Have a nice day!";
+                            setTimeout(() => {
+                              this.modalShow = false;
+                              this.$router.push("/");
+                            }, 3000);
+                            return;
+                          }
+                        }
+                      );
                     }
                   }
                 );
